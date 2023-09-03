@@ -33,7 +33,14 @@ const populateList = () => {
 
     todos.forEach(todo => {
         let todoElement = document.createElement('li')
+        todoElement.classList.add('todo')
         todoElement.textContent = todo.name
+
+        if (todo.isComplete) {
+            todoElement.classList.add("completed")
+        }
+        todoElement.addEventListener('click', () => completeTodo(todo))
+
         todoList.appendChild(todoElement)
     })
 }
@@ -62,3 +69,9 @@ const addTodo = (event) => {
 }
 
 todoForm.addEventListener('submit', addTodo)
+
+// COMPLETE A TODO ------------------------------
+const completeTodo = (todo) => {
+    todo.isComplete = !todo.isComplete
+    populateList()
+}

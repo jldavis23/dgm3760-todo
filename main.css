@@ -1,0 +1,11 @@
+* {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.todo {
+    cursor: pointer;
+}
+
+.completed {
+    text-decoration: line-through;
+}
