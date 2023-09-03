@@ -21,3 +21,44 @@ let todos = [
         dueDate: "none"
     }
 ]
+let id = todos.length + 1
+
+// DISPLAY THE TODO LIST ------------------------------
+const todoList = document.querySelector('.todo-list')
+
+const populateList = () => {
+    while (todoList.firstChild) {
+        todoList.removeChild(todoList.firstChild);
+    }
+
+    todos.forEach(todo => {
+        let todoElement = document.createElement('li')
+        todoElement.textContent = todo.name
+        todoList.appendChild(todoElement)
+    })
+}
+
+populateList()
+
+// ADD A NEW TODO ------------------------------
+const todoForm = document.querySelector('.todo-form')
+const todoInput = document.querySelector('.todo-input')
+
+const addTodo = (event) => {
+    event.preventDefault()
+
+    todos = [...todos, 
+        {
+            id: id++,
+            name: todoInput.value,
+            isComplete: false,
+            category: 'none',
+            dueDate: 'none'
+        }
+    ]
+
+    todoInput.value = ''
+    populateList()
+}
+
+todoForm.addEventListener('submit', addTodo)
