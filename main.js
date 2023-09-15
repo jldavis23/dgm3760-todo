@@ -45,7 +45,6 @@ const populateList = () => {
     todos.forEach(todo => {
         let todoElement = document.createElement('li')
         todoElement.classList.add('todo')
-        // todoElement.textContent = todo.name
 
         let todoLabel = document.createElement('div')
         todoLabel.className = 'todo-label'
@@ -104,9 +103,9 @@ const populateList = () => {
 
         
         todoList.appendChild(todoElement)
-
-        updateItemsLeft()
     })
+
+    updateItemsLeft()
 }
 
 populateList()
