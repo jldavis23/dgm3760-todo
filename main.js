@@ -34,7 +34,6 @@ const updateItemsLeft = () => {
     leftToComplete.textContent = `${itemsLeft.length} item(s) left to complete`
 }
 
-
 // DISPLAY THE TODO LIST ------------------------------
 const todoList = document.querySelector('.todo-list')
 
@@ -158,3 +157,12 @@ const deleteTodo = (id) => {
     populateList()
 }
 
+// CLEAR COMPLETED TODOS ------------------------------
+const clearCompleted = () => {
+    const newTodos = todos.filter(todo => !todo.isComplete)
+    todos = newTodos
+    populateList()
+}
+
+const clearBtn = document.querySelector('.clear-btn')
+clearBtn.addEventListener('click', clearCompleted)
