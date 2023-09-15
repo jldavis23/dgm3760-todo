@@ -8,17 +8,23 @@
 </head>
 <body>
     <main>
-        <h1>Todo App</h1>
+        <div class="wrapper">
+            <h1>TODO</h1>
 
-        <form class="todo-form">
-            <input type="text" class="todo-input">
-            <button type="submit">+</button>
-        </form>
-        
-        <ul class="todo-list">
+            <form class="todo-form">
+                <input type="text" class="todo-input">
+                <button type="submit">+</button>
+            </form>
             
-        </ul>
+            <ul class="todo-list">
+                <!-- To do list content goes here -->
+            </ul>
 
+            <div class="info">
+                <p>items left</p>
+                <button>Clear Completed</button>
+            </div>
+        </div>
     </main>
 
     <script src="main.js"></script>
