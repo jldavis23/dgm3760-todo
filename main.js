@@ -44,6 +44,7 @@ const populateList = () => {
 
         let checkbox = document.createElement('input')
         checkbox.type = 'checkbox'
+        if (todo.isComplete) checkbox.checked = true
         checkbox.addEventListener('click', () => completeTodo(todo))
 
         todoLabel.appendChild(checkbox)
@@ -56,6 +57,7 @@ const populateList = () => {
 
         let deleteBtn = document.createElement('button')
         deleteBtn.textContent = 'delete'
+        deleteBtn.addEventListener('click', () => deleteTodo(todo.id))
 
         if (todo.editMode) {
             let form = document.createElement('form')
@@ -135,5 +137,12 @@ const saveTodo = (event, todo, input) => {
     todo.editMode = !todo.editMode
     todo.name = input.value
 
+    populateList()
+}
+
+// DELETE A TODO ------------------------------
+const deleteTodo = (id) => {
+    const newTodos = todos.filter(todo => todo.id !== id)
+    todos = newTodos
     populateList()
 }
