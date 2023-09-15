@@ -26,6 +26,15 @@ let todos = [
 ]
 let id = todos.length + 1
 
+// NUMBER OF TODOS LEFT TO COMPLETE
+const leftToComplete = document.querySelector('.items-left')
+
+const updateItemsLeft = () => {
+    let itemsLeft = todos.filter(todo => !todo.isComplete)
+    leftToComplete.textContent = `${itemsLeft.length} item(s) left to complete`
+}
+
+
 // DISPLAY THE TODO LIST ------------------------------
 const todoList = document.querySelector('.todo-list')
 
@@ -96,6 +105,8 @@ const populateList = () => {
 
         
         todoList.appendChild(todoElement)
+
+        updateItemsLeft()
     })
 }
 
@@ -146,3 +157,4 @@ const deleteTodo = (id) => {
     todos = newTodos
     populateList()
 }
+
