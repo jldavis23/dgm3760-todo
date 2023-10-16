@@ -41,6 +41,24 @@ let categories = [
     }
 ]
 
+// DISPLAY CATEGORIES LIST ------------------------------
+const categoryList = document.querySelector('.categories-list')
+
+const showCategoryList = () => {
+    while (categoryList.firstChild) {
+        categoryList.removeChild(categoryList.firstChild);
+    }
+
+    categories.forEach(category => {
+        let li = document.createElement('li')
+        li.textContent = category.categoryName
+        li.className = 'category-btn'
+        categoryList.appendChild(li)
+    })
+}
+
+showCategoryList()
+
 // NUMBER OF TODOS LEFT TO COMPLETE
 const leftToComplete = document.querySelector('.items-left')
 
@@ -58,80 +76,82 @@ const populateList = () => {
     }
 
     todos.forEach(todo => {
-        const li = `
-            <li class="todo">
-                <div class="todo-label">
-                    <input type="checkbox">
-                    <span>${todo.name}</span>
-                </div>
-                <div class="todo-buttons">
-                    <button>edit</button>
-                    <button>delete</button>
-                </div>
-            </li>
-        `
+        // const li = `
+        //     <li class="todo">
+        //         <div class="todo-label">
+        //             <input type="checkbox">
+        //             <span>${todo.name}</span>
+        //         </div>
+        //         <div class="todo-buttons">
+        //             <button>edit</button>
+        //             <button>delete</button>
+        //         </div>
+        //     </li>
+        // `
+        
+        // todoList.insertAdjacentHTML('beforeend', li)
+        
 
-        todoList.insertAdjacentHTML('beforeend', li)
-        // let todoElement = document.createElement('li')
-        // todoElement.classList.add('todo')
+        let todoElement = document.createElement('li')
+        todoElement.classList.add('todo')
 
-        // let todoLabel = document.createElement('div')
-        // todoLabel.className = 'todo-label'
+        let todoLabel = document.createElement('div')
+        todoLabel.className = 'todo-label'
 
-        // let checkbox = document.createElement('input')
-        // checkbox.type = 'checkbox'
-        // if (todo.isComplete) checkbox.checked = true
-        // checkbox.addEventListener('click', () => completeTodo(todo))
+        let checkbox = document.createElement('input')
+        checkbox.type = 'checkbox'
+        if (todo.isComplete) checkbox.checked = true
+        checkbox.addEventListener('click', () => completeTodo(todo))
 
-        // todoLabel.appendChild(checkbox)
-        // todoElement.appendChild(todoLabel)
+        todoLabel.appendChild(checkbox)
+        todoElement.appendChild(todoLabel)
 
-        // let todoButtons = document.createElement('div')
-        // todoButtons.className = 'todo-buttons'
+        let todoButtons = document.createElement('div')
+        todoButtons.className = 'todo-buttons'
 
-        // let editBtn = document.createElement('button')
+        let editBtn = document.createElement('button')
 
-        // let deleteBtn = document.createElement('button')
-        // deleteBtn.textContent = 'delete'
-        // deleteBtn.addEventListener('click', () => deleteTodo(todo.id))
+        let deleteBtn = document.createElement('button')
+        deleteBtn.textContent = 'delete'
+        deleteBtn.addEventListener('click', () => deleteTodo(todo.id))
 
-        // if (todo.editMode) {
-        //     let form = document.createElement('form')
+        if (todo.editMode) {
+            let form = document.createElement('form')
 
-        //     let input = document.createElement('input')
-        //     input.type = 'text'
-        //     input.value = todo.name
+            let input = document.createElement('input')
+            input.type = 'text'
+            input.value = todo.name
 
-        //     form.addEventListener('submit', () => saveTodo(event, todo, input))
+            form.addEventListener('submit', () => saveTodo(event, todo, input))
 
-        //     form.appendChild(input)
-        //     todoLabel.appendChild(form)
+            form.appendChild(input)
+            todoLabel.appendChild(form)
 
-        //     editBtn.textContent = 'save'
-        //     editBtn.addEventListener('click', () => saveTodo(event, todo, input))
-        // } else {
-        //     let span = document.createElement('span')
-        //     span.textContent = todo.name
+            editBtn.textContent = 'save'
+            editBtn.addEventListener('click', () => saveTodo(event, todo, input))
+        } else {
+            let span = document.createElement('span')
+            span.textContent = todo.name
 
-        //     if (todo.isComplete) {
-        //         span.className = 'completed'
-        //     }
-        //     todoLabel.appendChild(span)
+            if (todo.isComplete) {
+                span.className = 'completed'
+            }
+            todoLabel.appendChild(span)
 
-        //     editBtn.textContent = 'edit'
-        //     editBtn.addEventListener('click', () => {
-        //         todo.editMode = true
-        //         populateList()
-        //     })
-        // }
+            editBtn.textContent = 'edit'
+            editBtn.addEventListener('click', () => {
+                todo.editMode = true
+                populateList()
+            })
+        }
 
         
-        // todoButtons.appendChild(editBtn)
-        // todoButtons.appendChild(deleteBtn)
-        // todoElement.appendChild(todoButtons)
+        todoButtons.appendChild(editBtn)
+        todoButtons.appendChild(deleteBtn)
+        todoElement.appendChild(todoButtons)
 
         
-        // todoList.appendChild(todoElement)
+        todoList.appendChild(todoElement)
     })
 
     updateItemsLeft()

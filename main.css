@@ -14,7 +14,7 @@ main {
 }
 
 .wrapper {
-    max-width: 500px;
+    max-width: 600px;
     margin: auto;
     padding: 30px;
     background-color: #4c6c59;
@@ -26,10 +26,42 @@ h1 {
     font-weight: 100;
     font-size: 36px;
     letter-spacing: 12px;
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.categories-bar h2 {
+    font-weight: 100;
+    font-size: 16px;
+    letter-spacing: 3px;
+    text-align: center;
+}
+
+.categories-list {
+    list-style-type: none;
+    margin-top: 10px;
+}
+
+.category-btn {
+    font-size: 15px;
+    padding: 10px;
+}
+
+.category-btn:hover {
+    background-color: #72a285;
+}
+
+.todo-bar {
+    width: 100%;
 }
 
 .todo-form {
-    margin: 30px 0;
+    margin-bottom: 30px;
     display: flex;
     flex-direction: column;
     gap: 9px;
