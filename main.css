@@ -50,10 +50,20 @@ h1 {
 .category-btn {
     font-size: 15px;
     padding: 10px;
+    border-radius: 3px;
 }
 
 .category-btn:hover {
-    background-color: #72a285;
+    background-color: #608670;
+    cursor: pointer;
+}
+
+.active-category {
+    background-color: #314539;
+}
+
+.active-category:hover {
+    background-color: #314539;
 }
 
 .todo-bar {

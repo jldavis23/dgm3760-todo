@@ -28,6 +28,10 @@ let id = todos.length + 1
 
 let categories = [
     {
+        id: null,
+        categoryName: 'all'
+    },
+    {
         id: 1,
         categoryName: 'home'
     },
@@ -40,24 +44,7 @@ let categories = [
         categoryName: 'school'
     }
 ]
-
-// DISPLAY CATEGORIES LIST ------------------------------
-const categoryList = document.querySelector('.categories-list')
-
-const showCategoryList = () => {
-    while (categoryList.firstChild) {
-        categoryList.removeChild(categoryList.firstChild);
-    }
-
-    categories.forEach(category => {
-        let li = document.createElement('li')
-        li.textContent = category.categoryName
-        li.className = 'category-btn'
-        categoryList.appendChild(li)
-    })
-}
-
-showCategoryList()
+let categoriesID = categories.length
 
 // NUMBER OF TODOS LEFT TO COMPLETE
 const leftToComplete = document.querySelector('.items-left')
@@ -70,12 +57,20 @@ const updateItemsLeft = () => {
 // DISPLAY THE TODO LIST ------------------------------
 const todoList = document.querySelector('.todo-list')
 
-const populateList = () => {
+const populateList = (categoryID) => {
     while (todoList.firstChild) {
         todoList.removeChild(todoList.firstChild);
     }
 
-    todos.forEach(todo => {
+    let filteredTodos
+    if (categoryID) {
+        filteredTodos = todos.filter(todo => todo.category === categoryID)
+    } else {
+        filteredTodos = todos
+    }
+    
+
+    filteredTodos.forEach(todo => {
         // const li = `
         //     <li class="todo">
         //         <div class="todo-label">
@@ -141,7 +136,7 @@ const populateList = () => {
             editBtn.textContent = 'edit'
             editBtn.addEventListener('click', () => {
                 todo.editMode = true
-                populateList()
+                populateList(categoryID)
             })
         }
 
@@ -157,7 +152,35 @@ const populateList = () => {
     updateItemsLeft()
 }
 
-populateList()
+populateList(null)
+
+// DISPLAY CATEGORIES LIST ------------------------------
+const categoryList = document.querySelector('.categories-list')
+
+const showCategoryList = (activeCategory) => {
+    while (categoryList.firstChild) {
+        categoryList.removeChild(categoryList.firstChild);
+    }
+
+    categories.forEach(category => {
+        let p = document.createElement('p')
+        p.textContent = category.categoryName
+
+        if (activeCategory === category.id) {
+            p.className = 'category-btn active-category'
+        } else {
+            p.className = 'category-btn'
+        }
+
+        p.addEventListener('click', () => showCategoryList(category.id))
+
+        categoryList.appendChild(p)
+    })
+
+    populateList(activeCategory)
+}
+
+showCategoryList(null)
 
 // ADD A NEW TODO ------------------------------
 const todoForm = document.querySelector('.todo-form')
