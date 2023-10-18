@@ -245,23 +245,15 @@ const showCategoryList = (activeCategory) => {
             })
         }
 
-
-        // let editBtn = document.createElement('button')
-        // editBtn.className = 'category-actions'
-        // editBtn.textContent = 'edit'
-        // editBtn.addEventListener('click', () => console.log('hello'))
-        // div.appendChild(editBtn)
-
-        // let editBtn = document.createElement('button')
-        // editBtn.className = 'category-actions'
-        // editBtn.textContent = 'edit'
-        // editBtn.addEventListener('click', () => console.log('hello'))
-
         div.appendChild(editBtn)
         div.appendChild(deleteBtn)
         li.appendChild(div)
 
         categoryList.appendChild(li)
+
+        if (!category.id) {
+            li.removeChild(li.lastChild)
+        }
     })
 
     currentCategory = activeCategory
