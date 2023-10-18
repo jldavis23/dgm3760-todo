@@ -29,19 +29,23 @@ let id = todos.length + 1
 let categories = [
     {
         id: null,
-        categoryName: 'all'
+        categoryName: 'all',
+        editMode: false
     },
     {
         id: 1,
-        categoryName: 'home'
+        categoryName: 'home',
+        editMode: false
     },
     {
         id: 2,
-        categoryName: 'work'
+        categoryName: 'work',
+        editMode: false
     },
     {
         id: 3,
-        categoryName: 'school'
+        categoryName: 'school',
+        editMode: false
     }
 ]
 let categoriesID = categories.length
@@ -197,18 +201,67 @@ const showCategoryList = (activeCategory) => {
         categorySelect.appendChild(option)
 
         //Create the category sidebar-----------
-        let p = document.createElement('p')
-        p.textContent = category.categoryName
+        let li = document.createElement('li')
 
-        if (activeCategory === category.id) {
-            p.className = 'category-btn active-category'
+        let div = document.createElement('div')
+        div.className = 'category-actions'
+
+        let editBtn = document.createElement('button')
+
+        let deleteBtn = document.createElement('button')
+        deleteBtn.textContent = 'delete'
+        deleteBtn.addEventListener('click', () => deleteCategory(category.id))
+
+        if (category.editMode) {
+            let form = document.createElement('form')
+
+            let input = document.createElement('input')
+            input.type = 'text'
+            input.value = category.categoryName
+
+            form.addEventListener('submit', () => saveCategory(event, category, input))
+            form.appendChild(input)
+
+            li.appendChild(form)
+
+            editBtn.textContent = 'save'
+            editBtn.addEventListener('click', () => saveCategory(event, category, input))
         } else {
-            p.className = 'category-btn'
+            if (activeCategory === category.id) {
+                li.className = 'category-btn active-category'
+            } else {
+                li.className = 'category-btn'
+            }
+    
+            let span = document.createElement('span')
+            span.textContent = category.categoryName
+            span.addEventListener('click', () => showCategoryList(category.id))
+            li.appendChild(span)
+
+            editBtn.textContent = 'edit'
+            editBtn.addEventListener('click', () => {
+                category.editMode = true
+                showCategoryList(currentCategory)
+            })
         }
 
-        p.addEventListener('click', () => showCategoryList(category.id))
 
-        categoryList.appendChild(p)
+        // let editBtn = document.createElement('button')
+        // editBtn.className = 'category-actions'
+        // editBtn.textContent = 'edit'
+        // editBtn.addEventListener('click', () => console.log('hello'))
+        // div.appendChild(editBtn)
+
+        // let editBtn = document.createElement('button')
+        // editBtn.className = 'category-actions'
+        // editBtn.textContent = 'edit'
+        // editBtn.addEventListener('click', () => console.log('hello'))
+
+        div.appendChild(editBtn)
+        div.appendChild(deleteBtn)
+        li.appendChild(div)
+
+        categoryList.appendChild(li)
     })
 
     currentCategory = activeCategory
@@ -255,7 +308,8 @@ const addCategory = (event) => {
         categories = [...categories,
             {
                 id: categoriesID++,
-                categoryName: newCategory
+                categoryName: newCategory,
+                editMode: false
             }
         ]
     }
@@ -272,7 +326,7 @@ const completeTodo = (todo) => {
     populateList(currentCategory)
 }
 
-// EDIT OR SAVE ------------------------------
+// EDIT OR SAVE TODO ------------------------------
 const saveTodo = (event, todo, input, select) => {
     event.preventDefault()
 
@@ -283,11 +337,32 @@ const saveTodo = (event, todo, input, select) => {
     populateList(currentCategory)
 }
 
+// EDIT OR SAVE CATEGORY ------------------------------
+const saveCategory = (event, category, input) => {
+    event.preventDefault()
+
+    category.editMode = !category.editMode
+    category.categoryName = input.value
+
+    showCategoryList(currentCategory)
+}
+
 // DELETE A TODO ------------------------------
 const deleteTodo = (id) => {
     const newTodos = todos.filter(todo => todo.id !== id)
     todos = newTodos
     populateList(currentCategory)
+}
+
+// DELETE A CATEGORY ------------------------------
+const deleteCategory = (id) => {
+    const newCategories = categories.filter(category => category.id !== id)
+    categories = newCategories
+
+    const newTodos = todos.filter(todo => todo.category !== id)
+    todos = newTodos
+
+    showCategoryList(currentCategory)
 }
 
 // CLEAR COMPLETED TODOS ------------------------------

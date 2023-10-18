@@ -68,14 +68,41 @@ h1 {
 
 .category-btn {
     font-size: 15px;
-    padding: 10px;
     border-radius: 3px;
+    display: flex;
 }
 
 .category-btn:hover {
     background-color: #608670;
     cursor: pointer;
 }
+
+.category-btn span {
+    padding: 10px;
+    display: block;
+    width: 100%;
+}
+
+.category-actions {
+    display: flex;
+}
+
+.category-actions button {
+    /* visibility: hidden; */
+    border: none;
+    padding: 5px;
+    background-color: transparent;
+    color: #d4d4d4;
+}
+
+.category-actions button:hover {
+    cursor: pointer;
+    color: black;
+}
+
+/* .category-btn:hover .category-actions {
+    visibility: visible;
+} */
 
 .active-category {
     background-color: #314539;
