@@ -155,6 +155,7 @@ const populateList = (categoryID) => {
 populateList(null)
 
 // DISPLAY CATEGORIES LIST ------------------------------
+let currentCategory
 const categoryList = document.querySelector('.categories-list')
 
 const showCategoryList = (activeCategory) => {
@@ -177,6 +178,7 @@ const showCategoryList = (activeCategory) => {
         categoryList.appendChild(p)
     })
 
+    currentCategory = activeCategory
     populateList(activeCategory)
 }
 
@@ -185,6 +187,7 @@ showCategoryList(null)
 // ADD A NEW TODO ------------------------------
 const todoForm = document.querySelector('.todo-form')
 const todoInput = document.querySelector('.todo-input')
+const categoryInput = document.querySelector('.category-input')
 
 const addTodo = (event) => {
     event.preventDefault()
@@ -194,13 +197,14 @@ const addTodo = (event) => {
             id: id++,
             name: todoInput.value,
             isComplete: false,
-            category: 'none',
+            category: parseInt(categoryInput.value),
             dueDate: 'none'
         }
     ]
 
     todoInput.value = ''
-    populateList()
+    showCategoryList(parseInt(categoryInput.value))
+    categoryInput.value = ''
 }
 
 todoForm.addEventListener('submit', addTodo)
@@ -208,7 +212,7 @@ todoForm.addEventListener('submit', addTodo)
 // COMPLETE A TODO ------------------------------
 const completeTodo = (todo) => {
     todo.isComplete = !todo.isComplete
-    populateList()
+    populateList(currentCategory)
 }
 
 // EDIT OR SAVE ------------------------------
@@ -218,21 +222,21 @@ const saveTodo = (event, todo, input) => {
     todo.editMode = !todo.editMode
     todo.name = input.value
 
-    populateList()
+    populateList(currentCategory)
 }
 
 // DELETE A TODO ------------------------------
 const deleteTodo = (id) => {
     const newTodos = todos.filter(todo => todo.id !== id)
     todos = newTodos
-    populateList()
+    populateList(currentCategory)
 }
 
 // CLEAR COMPLETED TODOS ------------------------------
 const clearCompleted = () => {
     const newTodos = todos.filter(todo => !todo.isComplete)
     todos = newTodos
-    populateList()
+    populateList(currentCategory)
 }
 
 const clearBtn = document.querySelector('.clear-btn')
