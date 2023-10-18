@@ -117,21 +117,37 @@ const populateList = (categoryID) => {
             input.type = 'text'
             input.value = todo.name
 
-            form.addEventListener('submit', () => saveTodo(event, todo, input))
+            let select = document.createElement('select')
+            categories.forEach(category => {
+                let option = document.createElement('option')
+                option.value = category.id
+                option.textContent = category.categoryName
+                if (category.id === todo.category) option.selected = true
+                if (category.id) select.appendChild(option)
+            })
+
+            form.addEventListener('submit', () => saveTodo(event, todo, input, select))
 
             form.appendChild(input)
+            form.appendChild(select)
             todoLabel.appendChild(form)
 
             editBtn.textContent = 'save'
-            editBtn.addEventListener('click', () => saveTodo(event, todo, input))
+            editBtn.addEventListener('click', () => saveTodo(event, todo, input, select))
         } else {
-            let span = document.createElement('span')
-            span.textContent = todo.name
+            let name = document.createElement('span')
+            name.textContent = todo.name
 
             if (todo.isComplete) {
-                span.className = 'completed'
+                name.className = 'completed'
             }
-            todoLabel.appendChild(span)
+            todoLabel.appendChild(name)
+
+            let categoryLabel = document.createElement('span')
+            categoryLabel.className = 'category-label'
+            const category = categories.filter(category => category.id === todo.category)
+            categoryLabel.textContent = `(${category[0].categoryName})`
+            todoLabel.appendChild(categoryLabel)
 
             editBtn.textContent = 'edit'
             editBtn.addEventListener('click', () => {
@@ -151,8 +167,6 @@ const populateList = (categoryID) => {
 
     updateItemsLeft()
 }
-
-populateList(null)
 
 // DISPLAY CATEGORIES LIST ------------------------------
 let currentCategory
@@ -182,6 +196,7 @@ const showCategoryList = (activeCategory) => {
     populateList(activeCategory)
 }
 
+// Shows the category list and populates the todo list on inital load
 showCategoryList(null)
 
 // ADD A NEW TODO ------------------------------
@@ -216,11 +231,12 @@ const completeTodo = (todo) => {
 }
 
 // EDIT OR SAVE ------------------------------
-const saveTodo = (event, todo, input) => {
+const saveTodo = (event, todo, input, select) => {
     event.preventDefault()
 
     todo.editMode = !todo.editMode
     todo.name = input.value
+    todo.category = parseInt(select.value)
 
     populateList(currentCategory)
 }
