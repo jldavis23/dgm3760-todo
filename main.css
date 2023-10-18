@@ -42,6 +42,25 @@ h1 {
     text-align: center;
 }
 
+.category-form {
+    margin-top: 10px;
+    display: flex;
+}
+
+.category-form input {
+    width: 100%;
+    border: none;
+    border-radius: 3px 0 0 3px;
+    padding: 5px 5px;
+    font-size: 12px;
+}
+
+.category-form button {
+    border: none;
+    padding: 5px;
+    border-radius: 0 3px 3px 0;
+}
+
 .categories-list {
     list-style-type: none;
     margin-top: 10px;

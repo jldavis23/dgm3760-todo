@@ -14,20 +14,27 @@
             <div class="content">
                 <div class="categories-bar">
                     <h2>CATEGORIES</h2>
+
+                    <form class="category-form">
+                        <input type="text" class="category-input" placeholder="New category...">
+                        <button type="submit">+</button>
+                    </form>
                 
                     <div class="categories-list">
                         <!-- Category list goes here -->
                     </div>
+
+                    
                 </div>
 
                 <div class="todo-bar">
                     <form class="todo-form">
                         <input type="text" class="todo-input" placeholder="Create a new todo..." required> 
-                        <select class="category-input" required>
-                            <option value="" disabled selected>--Please choose a category--</option>
+                        <select class="category-select" required>
+                            <!-- <option value="" disabled selected>--Please choose a category--</option>
                             <option value="1">home</option>
                             <option value="2">work</option>
-                            <option value="3">school</option>
+                            <option value="3">school</option> -->
                         </select>
                         <button type="submit">ADD TODO</button>
                     </form>

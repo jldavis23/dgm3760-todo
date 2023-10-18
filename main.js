@@ -171,13 +171,32 @@ const populateList = (categoryID) => {
 // DISPLAY CATEGORIES LIST ------------------------------
 let currentCategory
 const categoryList = document.querySelector('.categories-list')
+const categorySelect = document.querySelector('.category-select')
 
 const showCategoryList = (activeCategory) => {
     while (categoryList.firstChild) {
         categoryList.removeChild(categoryList.firstChild);
     }
 
+    while (categorySelect.firstChild) {
+        categorySelect.removeChild(categorySelect.firstChild);
+    }
+
     categories.forEach(category => {
+        //Create the category select-----------
+        let option = document.createElement('option')
+        option.value = category.id
+        if (category.id) {
+            option.textContent = category.categoryName
+        } else {
+            option.textContent = "Please choose a category"
+            option.selected = true
+            option.disabled = true
+            option.value = ''
+        }
+        categorySelect.appendChild(option)
+
+        //Create the category sidebar-----------
         let p = document.createElement('p')
         p.textContent = category.categoryName
 
@@ -202,7 +221,6 @@ showCategoryList(null)
 // ADD A NEW TODO ------------------------------
 const todoForm = document.querySelector('.todo-form')
 const todoInput = document.querySelector('.todo-input')
-const categoryInput = document.querySelector('.category-input')
 
 const addTodo = (event) => {
     event.preventDefault()
@@ -212,17 +230,41 @@ const addTodo = (event) => {
             id: id++,
             name: todoInput.value,
             isComplete: false,
-            category: parseInt(categoryInput.value),
+            category: parseInt(categorySelect.value),
             dueDate: 'none'
         }
     ]
 
     todoInput.value = ''
-    showCategoryList(parseInt(categoryInput.value))
-    categoryInput.value = ''
+    showCategoryList(parseInt(categorySelect.value))
+    categorySelect.value = ''
 }
 
 todoForm.addEventListener('submit', addTodo)
+
+// ADD A NEW CATEGORY ------------------------------
+const categoryForm = document.querySelector('.category-form')
+const categoryInput = document.querySelector('.category-input')
+
+const addCategory = (event) => {
+    event.preventDefault()
+
+    const newCategory = categoryInput.value.toLowerCase()
+
+    if (!categories.some(category => category.categoryName === newCategory)) {
+        categories = [...categories,
+            {
+                id: categoriesID++,
+                categoryName: newCategory
+            }
+        ]
+    }
+
+    categoryInput.value = ''
+    showCategoryList(currentCategory)
+}
+
+categoryForm.addEventListener('submit', addCategory)
 
 // COMPLETE A TODO ------------------------------
 const completeTodo = (todo) => {
