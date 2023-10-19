@@ -45,21 +45,22 @@ h1 {
 
 .category-form {
     display: flex;
+    gap: 3px;
 }
 
 .category-form input {
     width: 100%;
     border: none;
-    border-radius: 3px 0 0 3px;
+    border-radius: 3px;
     padding: 5px 5px;
     font-size: 12px;
 }
 
 .category-form button {
     border: none;
-    padding: 5px;
-    border-radius: 0 3px 3px 0;
-    color: #dedede
+    padding: 8px;
+    border-radius: 3px;
+    background-color: #dedede;
 }
 
 .categories-list {

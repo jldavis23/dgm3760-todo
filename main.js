@@ -55,7 +55,7 @@ const leftToComplete = document.querySelector('.items-left')
 
 const updateItemsLeft = () => {
     let itemsLeft = todos.filter(todo => !todo.isComplete)
-    leftToComplete.textContent = `${itemsLeft.length} item(s) left to complete`
+    leftToComplete.textContent = `${itemsLeft.length} item(s) total left to complete`
 }
 
 // DISPLAY THE TODO LIST ------------------------------
