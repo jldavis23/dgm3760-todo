@@ -32,18 +32,18 @@ h1 {
 .content {
     display: flex;
     gap: 30px;
-    margin-top: 30px;
+    /* margin-top: 30px; */
 }
 
-.categories-bar h2 {
+.heading {
     font-weight: 100;
     font-size: 16px;
     letter-spacing: 3px;
     text-align: center;
+    margin-bottom: 10px;
 }
 
 .category-form {
-    margin-top: 10px;
     display: flex;
 }
 
@@ -59,6 +59,7 @@ h1 {
     border: none;
     padding: 5px;
     border-radius: 0 3px 3px 0;
+    color: #dedede
 }
 
 .categories-list {
@@ -120,8 +121,8 @@ h1 {
 .todo-form {
     margin-bottom: 30px;
     display: flex;
-    flex-direction: column;
-    gap: 9px;
+    /* flex-direction: column; */
+    gap: 5px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
@@ -145,8 +146,12 @@ h1 {
     -moz-box-sizing: border-box;
 }
 
+.todo-form select option:disabled {
+    color: #b1b1b1;
+}
+
 .todo-form button {
-    width: 30%;
+    width: 20%;
     padding: 10px;
     border: none;
     border-radius: 3px;

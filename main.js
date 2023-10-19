@@ -193,7 +193,7 @@ const showCategoryList = (activeCategory) => {
         if (category.id) {
             option.textContent = category.categoryName
         } else {
-            option.textContent = "Please choose a category"
+            option.textContent = "Category"
             option.selected = true
             option.disabled = true
             option.value = ''
