@@ -61,6 +61,14 @@ app.put('/api/todos', (req, res) => {
     res.send(todos)
 })
 
+// DELETE TODO
+app.delete('/api/todos', (req, res) => {
+    const newTodos = todos.filter(todo => todo.id !== req.body.id)
+    todos = newTodos
+
+    res.send(newTodos)
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on ${port}`)
 })
