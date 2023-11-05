@@ -118,6 +118,14 @@ app.post('/api/categories', (req, res) => {
     res.send(categories)
 })
 
+// PUT CATEGORIES
+app.put('/api/categories', (req, res) => {
+    let i = categories.indexOf(categories.filter(category => category.id === req.body.id)[0])
+    categories[i] = req.body
+
+    res.send(categories)
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on ${port}`)
 })
