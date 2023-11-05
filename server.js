@@ -65,37 +65,47 @@ app.get('/api/todos', (req, res) => {
 // POST TODO
 app.post('/api/todos', (req, res) => {
     todos = [...todos,
-        {
-            id: todoID++,
-            name: req.body.name,
-            isComplete: false,
-            category: req.body.category,
-            editMode: false
-        }
+    {
+        id: todoID++,
+        name: req.body.name,
+        isComplete: false,
+        category: req.body.category,
+        editMode: false
+    }
     ]
 
     res.send(todos)
 })
 
 // PUT TODO
-app.put('/api/todos', (req, res) => {
-    let todoToBeUpdated = todos.indexOf(todos.filter(todo => todo.id === req.body.id)[0])
-    todos[todoToBeUpdated] = req.body
+app.put('/api/todos/:id', (req, res) => {
+    let todoToBeUpdated = todos.indexOf(todos.filter(todo => todo.id === JSON.parse(req.params.id))[0])
+
+    todos[todoToBeUpdated] = {
+        id: JSON.parse(req.params.id),
+        name: req.body.name,
+        isComplete: req.body.isComplete,
+        category: req.body.category,
+        editMode: req.body.editMode
+    }
 
     res.send(todos)
+
+
 })
 
 // DELETE TODO
-app.delete('/api/todos', (req, res) => {
-    const newTodos = todos.filter(todo => todo.id !== req.body.id)
+app.delete('/api/todos/:id', (req, res) => {
+    const newTodos = todos.filter(todo => todo.id !== JSON.parse(req.params.id))
     todos = newTodos
+    console.log(req.params)
 
     res.send(todos)
 })
 
 // GET ALL TODOS FOR A CATEGORY
-app.get('/api/categories/todos', (req, res) => {
-    const filteredTodos = todos.filter(todo => todo.category === req.body.id)
+app.get('/api/categories/:id/todos', (req, res) => {
+    const filteredTodos = todos.filter(todo => todo.category === JSON.parse(req.params.id))
 
     res.send(filteredTodos)
 })
@@ -108,27 +118,31 @@ app.get('/api/categories', (req, res) => {
 // POST CATEGORIES
 app.post('/api/categories', (req, res) => {
     categories = [...categories,
-        {
-            id: categoriesID++,
-            categoryName: req.body.categoryName,
-            editMode: false
-        }
+    {
+        id: categoriesID++,
+        categoryName: req.body.categoryName,
+        editMode: false
+    }
     ]
 
     res.send(categories)
 })
 
 // PUT CATEGORIES
-app.put('/api/categories', (req, res) => {
-    let i = categories.indexOf(categories.filter(category => category.id === req.body.id)[0])
-    categories[i] = req.body
+app.put('/api/categories/:id', (req, res) => {
+    let i = categories.indexOf(categories.filter(category => category.id === JSON.parse(req.params.id))[0])
+    categories[i] = {
+        id: JSON.parse(req.params.id),
+        categoryName: req.body.categoryName,
+        editMode: req.body.editMode
+    }
 
     res.send(categories)
 })
 
 // DELETE CATEGORY
-app.delete('/api/categories', (req, res) => {
-    const newCategories = categories.filter(category => category.id !== req.body.id)
+app.delete('/api/categories/:id', (req, res) => {
+    const newCategories = categories.filter(category => category.id !== JSON.parse(req.params.id))
     categories = newCategories
 
     res.send(categories)
