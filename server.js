@@ -32,6 +32,30 @@ let todos = [
 ]
 let todoID = todos.length + 1
 
+let categories = [
+    {
+        id: null,
+        categoryName: 'all',
+        editMode: false
+    },
+    {
+        id: 1,
+        categoryName: 'home',
+        editMode: false
+    },
+    {
+        id: 2,
+        categoryName: 'work',
+        editMode: false
+    },
+    {
+        id: 3,
+        categoryName: 'school',
+        editMode: false
+    }
+]
+let categoriesID = categories.length
+
 
 // GET TODOS
 app.get('/api/todos', (req, res) => {
@@ -67,6 +91,13 @@ app.delete('/api/todos', (req, res) => {
     todos = newTodos
 
     res.send(newTodos)
+})
+
+// GET ALL TODOS FOR A CATEGORY
+app.get('/api/todos-category', (req, res) => {
+    const filteredTodos = todos.filter(todo => todo.category === req.body.id)
+
+    res.send(filteredTodos)
 })
 
 app.listen(port, () => {
