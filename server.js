@@ -94,10 +94,15 @@ app.delete('/api/todos', (req, res) => {
 })
 
 // GET ALL TODOS FOR A CATEGORY
-app.get('/api/todos-category', (req, res) => {
+app.get('/api/categories/todos', (req, res) => {
     const filteredTodos = todos.filter(todo => todo.category === req.body.id)
 
     res.send(filteredTodos)
+})
+
+// GET CATEGORIES
+app.get('/api/categories', (req, res) => {
+    res.send(categories)
 })
 
 app.listen(port, () => {
