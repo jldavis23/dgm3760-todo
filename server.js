@@ -105,6 +105,19 @@ app.get('/api/categories', (req, res) => {
     res.send(categories)
 })
 
+// POST CATEGORIES
+app.post('/api/categories', (req, res) => {
+    categories = [...categories,
+        {
+            id: categoriesID++,
+            categoryName: req.body.categoryName,
+            editMode: false
+        }
+    ]
+
+    res.send(categories)
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on ${port}`)
 })
