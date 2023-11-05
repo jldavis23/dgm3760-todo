@@ -90,7 +90,7 @@ app.delete('/api/todos', (req, res) => {
     const newTodos = todos.filter(todo => todo.id !== req.body.id)
     todos = newTodos
 
-    res.send(newTodos)
+    res.send(todos)
 })
 
 // GET ALL TODOS FOR A CATEGORY
@@ -126,6 +126,16 @@ app.put('/api/categories', (req, res) => {
     res.send(categories)
 })
 
+// DELETE CATEGORY
+app.delete('/api/categories', (req, res) => {
+    const newCategories = categories.filter(category => category.id !== req.body.id)
+    categories = newCategories
+
+    res.send(categories)
+})
+
+
+// APP LISTEN
 app.listen(port, () => {
     console.log(`Example app listening on ${port}`)
 })
