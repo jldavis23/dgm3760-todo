@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3001
+const port = 3000
 
 const bodyParser = require('body-parser')
 
@@ -30,24 +30,33 @@ let todos = [
         editMode: false
     }
 ]
+let todoID = todos.length + 1
 
+
+// GET TODOS
 app.get('/api/todos', (req, res) => {
     res.send(todos)
 })
 
+// POST TODO
 app.post('/api/todos', (req, res) => {
-
-    // get new todo text
-
-    todos.push(
+    todos = [...todos,
         {
-            id: todos.length + 1,
+            id: todoID++,
             name: req.body.name,
             isComplete: false,
             category: req.body.category,
             editMode: false
         }
-    )
+    ]
+
+    res.send(todos)
+})
+
+// PUT TODO
+app.put('/api/todos', (req, res) => {
+    let todoToBeUpdated = todos.indexOf(todos.filter(todo => todo.id === req.body.id)[0])
+    todos[todoToBeUpdated] = req.body
 
     res.send(todos)
 })
