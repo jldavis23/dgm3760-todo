@@ -1,69 +1,22 @@
-// let todos = [
-//     {
-//         id: 1,
-//         name: "do homework",
-//         isComplete: false,
-//         category: 3,
-//         dueDate: "2023-09-23",
-//         editMode: false
-//     },
-//     {
-//         id: 2,
-//         name: "submit report",
-//         isComplete: false,
-//         category: 2,
-//         dueDate: "2023-09-04",
-//         editMode: false
-//     },
-//     {
-//         id: 3,
-//         name: "go grocery shopping",
-//         isComplete: true,
-//         category: 1,
-//         dueDate: "none",
-//         editMode: false
-//     }
-// ]
-// let id = todos.length + 1
+const getTodos = async () => {
+    const res = await fetch('/api/todos')
+    return res.json()
+}
 
-// let categories = [
-//     {
-//         id: null,
-//         categoryName: 'all',
-//         editMode: false
-//     },
-//     {
-//         id: 1,
-//         categoryName: 'home',
-//         editMode: false
-//     },
-//     {
-//         id: 2,
-//         categoryName: 'work',
-//         editMode: false
-//     },
-//     {
-//         id: 3,
-//         categoryName: 'school',
-//         editMode: false
-//     }
-// ]
-// let categoriesID = categories.length
-
-// fetch('/api/todos')
-//     .then(res => res.json())
-//     .then(data => populateList(todos, null))
+const getCategories = async () => {
+    const res = await fetch('/api/categories')
+    return res.json()
+}
 
 const initializeApp = async () => {
-    const res1 = await fetch('/api/categories')
-    const categories = await res1.json()
-
-    const res2 = await fetch('/api/todos')
-    const todos = await res2.json()
+    const categories = await getCategories()
+    const todos = await getTodos()
 
     showCategoryList(categories, todos, null)
 }
 initializeApp()
+
+
 
 // DISPLAY THE TODO LIST ------------------------------
 const todoList = document.querySelector('.todo-list')
@@ -258,20 +211,26 @@ const showCategoryList = (categories, todos, activeCategory) => {
 const todoForm = document.querySelector('.todo-form')
 const todoInput = document.querySelector('.todo-input')
 
-const addTodo = (event) => {
+const addTodo = async (event) => {
     event.preventDefault()
 
-    fetch('/api/todos', {
-        method: 'POST',
-        headers: {
-            "Content-Type": 'application/json'
-        },
-        body: JSON.stringify({
-            name: todoInput.value,
-            category: parseInt(categorySelect.value)
+    try {
+        const res = await fetch('/api/todos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: todoInput.value,
+                category: parseInt(categorySelect.value)
+            })
         })
-    })
-    initializeApp()
+        const todos = await res.json()
+        const categories = await getCategories()
+        showCategoryList(categories, todos, currentCategory)
+    } catch (err) {
+        console.log(err)
+    }
 
     todoInput.value = ''
     categorySelect.value = ''
@@ -288,15 +247,27 @@ const addCategory = (event) => {
 
     const newCategory = categoryInput.value.toLowerCase()
 
-    if (!categories.some(category => category.categoryName === newCategory)) {
-        categories = [...categories,
-        {
-            id: categoriesID++,
+    // if (!categories.some(category => category.categoryName === newCategory)) {
+    //     categories = [...categories,
+    //     {
+    //         id: categoriesID++,
+    //         categoryName: newCategory,
+    //         editMode: false
+    //     }
+    //     ]
+
+    // }
+
+    fetch('/api/categories', {
+        method: 'POST',
+        headers: {
+            "Content-Type": 'application/json'
+        },
+        body: JSON.stringify({
             categoryName: newCategory,
-            editMode: false
-        }
-        ]
-    }
+        })
+    })
+    initializeApp()
 
     categoryInput.value = ''
     showCategoryList(currentCategory)
