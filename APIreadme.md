@@ -115,4 +115,4 @@ Delete an existing category
 Request **DELETE /api/categories/{category_id}**
 * category_id: the id of the category to be deleted
 
-
+Response: The categories array with the specified category removed
