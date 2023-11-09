@@ -161,6 +161,7 @@ const populateList = (categories, todos, categoryID) => {
     })
 
     // NUMBER OF TODOS LEFT TO COMPLETE
+    const leftToComplete = document.querySelector('.items-left')
     let itemsLeft = todos.filter(todo => !todo.isComplete)
     leftToComplete.textContent = `${itemsLeft.length} item(s) total left to complete`
 }
@@ -253,9 +254,6 @@ const showCategoryList = (categories, todos, activeCategory) => {
     populateList(categories, todos, activeCategory)
 }
 
-// Shows the category list and populates the todo list on inital load
-// showCategoryList(null)
-
 // ADD A NEW TODO ------------------------------
 const todoForm = document.querySelector('.todo-form')
 const todoInput = document.querySelector('.todo-input')
@@ -263,31 +261,19 @@ const todoInput = document.querySelector('.todo-input')
 const addTodo = (event) => {
     event.preventDefault()
 
-    todos = [...todos,
-    {
-        id: id++,
-        name: todoInput.value,
-        isComplete: false,
-        category: parseInt(categorySelect.value),
-        dueDate: 'none'
-    }
-    ]
-
     fetch('/api/todos', {
         method: 'POST',
         headers: {
             "Content-Type": 'application/json'
         },
         body: JSON.stringify({
-            name: 'new todo',
-            category: 1
+            name: todoInput.value,
+            category: parseInt(categorySelect.value)
         })
     })
-        .then(res => res.json())
-        .then(data => console.log(data))
+    initializeApp()
 
     todoInput.value = ''
-    showCategoryList(parseInt(categorySelect.value))
     categorySelect.value = ''
 }
 
