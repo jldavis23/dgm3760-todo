@@ -242,35 +242,33 @@ todoForm.addEventListener('submit', addTodo)
 const categoryForm = document.querySelector('.category-form')
 const categoryInput = document.querySelector('.category-input')
 
-const addCategory = (event) => {
+const addCategory = async (event) => {
     event.preventDefault()
 
     const newCategory = categoryInput.value.toLowerCase()
+    let currentCategories = await getCategories()
 
-    // if (!categories.some(category => category.categoryName === newCategory)) {
-    //     categories = [...categories,
-    //     {
-    //         id: categoriesID++,
-    //         categoryName: newCategory,
-    //         editMode: false
-    //     }
-    //     ]
-
-    // }
-
-    fetch('/api/categories', {
-        method: 'POST',
-        headers: {
-            "Content-Type": 'application/json'
-        },
-        body: JSON.stringify({
-            categoryName: newCategory,
-        })
-    })
-    initializeApp()
+    if (!currentCategories.some(category => category.categoryName === newCategory)) {
+        try {
+            const res = await fetch('/api/categories', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify({
+                    categoryName: newCategory,
+                })
+            })
+            const categories = await res.json()
+            const todos = await getTodos()
+            console.log(categories)
+            showCategoryList(categories, todos, currentCategory)
+        } catch (err) {
+            console.log(err)
+        }   
+    }
 
     categoryInput.value = ''
-    showCategoryList(currentCategory)
 }
 
 categoryForm.addEventListener('submit', addCategory)
