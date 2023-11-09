@@ -1,67 +1,74 @@
-let todos = [
-    {
-        id: 1,
-        name: "do homework",
-        isComplete: false,
-        category: 3,
-        dueDate: "2023-09-23",
-        editMode: false
-    },
-    {
-        id: 2,
-        name: "submit report",
-        isComplete: false,
-        category: 2,
-        dueDate: "2023-09-04",
-        editMode: false
-    },
-    {
-        id: 3,
-        name: "go grocery shopping",
-        isComplete: true,
-        category: 1,
-        dueDate: "none",
-        editMode: false
-    }
-]
-let id = todos.length + 1
+// let todos = [
+//     {
+//         id: 1,
+//         name: "do homework",
+//         isComplete: false,
+//         category: 3,
+//         dueDate: "2023-09-23",
+//         editMode: false
+//     },
+//     {
+//         id: 2,
+//         name: "submit report",
+//         isComplete: false,
+//         category: 2,
+//         dueDate: "2023-09-04",
+//         editMode: false
+//     },
+//     {
+//         id: 3,
+//         name: "go grocery shopping",
+//         isComplete: true,
+//         category: 1,
+//         dueDate: "none",
+//         editMode: false
+//     }
+// ]
+// let id = todos.length + 1
 
-let categories = [
-    {
-        id: null,
-        categoryName: 'all',
-        editMode: false
-    },
-    {
-        id: 1,
-        categoryName: 'home',
-        editMode: false
-    },
-    {
-        id: 2,
-        categoryName: 'work',
-        editMode: false
-    },
-    {
-        id: 3,
-        categoryName: 'school',
-        editMode: false
-    }
-]
-let categoriesID = categories.length
+// let categories = [
+//     {
+//         id: null,
+//         categoryName: 'all',
+//         editMode: false
+//     },
+//     {
+//         id: 1,
+//         categoryName: 'home',
+//         editMode: false
+//     },
+//     {
+//         id: 2,
+//         categoryName: 'work',
+//         editMode: false
+//     },
+//     {
+//         id: 3,
+//         categoryName: 'school',
+//         editMode: false
+//     }
+// ]
+// let categoriesID = categories.length
 
-// NUMBER OF TODOS LEFT TO COMPLETE
-const leftToComplete = document.querySelector('.items-left')
+// fetch('/api/todos')
+//     .then(res => res.json())
+//     .then(data => populateList(todos, null))
 
-const updateItemsLeft = () => {
-    let itemsLeft = todos.filter(todo => !todo.isComplete)
-    leftToComplete.textContent = `${itemsLeft.length} item(s) total left to complete`
+const initializeApp = async () => {
+    const res1 = await fetch('/api/categories')
+    const categories = await res1.json()
+
+    const res2 = await fetch('/api/todos')
+    const todos = await res2.json()
+
+    showCategoryList(categories, todos, null)
 }
+initializeApp()
 
 // DISPLAY THE TODO LIST ------------------------------
 const todoList = document.querySelector('.todo-list')
 
-const populateList = (categoryID) => {
+const populateList = (categories, todos, categoryID) => {
     while (todoList.firstChild) {
         todoList.removeChild(todoList.firstChild);
     }
@@ -72,25 +79,9 @@ const populateList = (categoryID) => {
     } else {
         filteredTodos = todos
     }
-    
+
 
     filteredTodos.forEach(todo => {
-        // const li = `
-        //     <li class="todo">
-        //         <div class="todo-label">
-        //             <input type="checkbox">
-        //             <span>${todo.name}</span>
-        //         </div>
-        //         <div class="todo-buttons">
-        //             <button>edit</button>
-        //             <button>delete</button>
-        //         </div>
-        //     </li>
-        // `
-        
-        // todoList.insertAdjacentHTML('beforeend', li)
-        
-
         let todoElement = document.createElement('li')
         todoElement.classList.add('todo')
 
@@ -156,20 +147,22 @@ const populateList = (categoryID) => {
             editBtn.textContent = 'edit'
             editBtn.addEventListener('click', () => {
                 todo.editMode = true
-                populateList(categoryID)
+                populateList(categories, todos, categoryID)
             })
         }
 
-        
+
         todoButtons.appendChild(editBtn)
         todoButtons.appendChild(deleteBtn)
         todoElement.appendChild(todoButtons)
 
-        
+
         todoList.appendChild(todoElement)
     })
 
-    updateItemsLeft()
+    // NUMBER OF TODOS LEFT TO COMPLETE
+    let itemsLeft = todos.filter(todo => !todo.isComplete)
+    leftToComplete.textContent = `${itemsLeft.length} item(s) total left to complete`
 }
 
 // DISPLAY CATEGORIES LIST ------------------------------
@@ -177,7 +170,7 @@ let currentCategory
 const categoryList = document.querySelector('.categories-list')
 const categorySelect = document.querySelector('.category-select')
 
-const showCategoryList = (activeCategory) => {
+const showCategoryList = (categories, todos, activeCategory) => {
     while (categoryList.firstChild) {
         categoryList.removeChild(categoryList.firstChild);
     }
@@ -232,7 +225,7 @@ const showCategoryList = (activeCategory) => {
             } else {
                 li.className = 'category-btn'
             }
-    
+
             let span = document.createElement('span')
             span.textContent = category.categoryName
             span.addEventListener('click', () => showCategoryList(category.id))
@@ -257,11 +250,11 @@ const showCategoryList = (activeCategory) => {
     })
 
     currentCategory = activeCategory
-    populateList(activeCategory)
+    populateList(categories, todos, activeCategory)
 }
 
 // Shows the category list and populates the todo list on inital load
-showCategoryList(null)
+// showCategoryList(null)
 
 // ADD A NEW TODO ------------------------------
 const todoForm = document.querySelector('.todo-form')
@@ -270,15 +263,28 @@ const todoInput = document.querySelector('.todo-input')
 const addTodo = (event) => {
     event.preventDefault()
 
-    todos = [...todos, 
-        {
-            id: id++,
-            name: todoInput.value,
-            isComplete: false,
-            category: parseInt(categorySelect.value),
-            dueDate: 'none'
-        }
+    todos = [...todos,
+    {
+        id: id++,
+        name: todoInput.value,
+        isComplete: false,
+        category: parseInt(categorySelect.value),
+        dueDate: 'none'
+    }
     ]
+
+    fetch('/api/todos', {
+        method: 'POST',
+        headers: {
+            "Content-Type": 'application/json'
+        },
+        body: JSON.stringify({
+            name: 'new todo',
+            category: 1
+        })
+    })
+        .then(res => res.json())
+        .then(data => console.log(data))
 
     todoInput.value = ''
     showCategoryList(parseInt(categorySelect.value))
@@ -298,11 +304,11 @@ const addCategory = (event) => {
 
     if (!categories.some(category => category.categoryName === newCategory)) {
         categories = [...categories,
-            {
-                id: categoriesID++,
-                categoryName: newCategory,
-                editMode: false
-            }
+        {
+            id: categoriesID++,
+            categoryName: newCategory,
+            editMode: false
+        }
         ]
     }
 
