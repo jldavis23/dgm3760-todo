@@ -261,7 +261,6 @@ const addCategory = async (event) => {
             })
             const categories = await res.json()
             const todos = await getTodos()
-            console.log(categories)
             showCategoryList(categories, todos, currentCategory)
         } catch (err) {
             console.log(err)
@@ -330,7 +329,6 @@ const saveCategory = async (event, category, input) => {
     event.preventDefault()
 
     try {
-        
         const res = await fetch(`/api/categories/${category.id}`, {
             method: 'PUT',
             headers: {
@@ -354,10 +352,19 @@ const saveCategory = async (event, category, input) => {
 }
 
 // DELETE A TODO ------------------------------
-const deleteTodo = (id) => {
-    const newTodos = todos.filter(todo => todo.id !== id)
-    todos = newTodos
-    populateList(currentCategory)
+const deleteTodo = async (id) => {
+    try {
+        const res = await fetch(`/api/todos/${id}`, {
+            method: 'DELETE'
+        })
+
+        const todos = await res.json()
+        const categories = await getCategories()
+
+        populateList(categories, todos, currentCategory)
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 // DELETE A CATEGORY ------------------------------

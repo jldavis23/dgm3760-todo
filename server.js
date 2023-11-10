@@ -100,7 +100,6 @@ app.put('/api/todos/:id', (req, res) => {
 app.delete('/api/todos/:id', (req, res) => {
     const newTodos = todos.filter(todo => todo.id !== JSON.parse(req.params.id))
     todos = newTodos
-    console.log(req.params)
 
     res.send(todos)
 })
