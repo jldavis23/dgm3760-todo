@@ -299,14 +299,30 @@ const completeTodo = async (todo) => {
 }
 
 // EDIT OR SAVE TODO ------------------------------
-const saveTodo = (event, todo, input, select) => {
+const saveTodo = async (event, todo, input, select) => {
     event.preventDefault()
 
-    todo.editMode = !todo.editMode
-    todo.name = input.value
-    todo.category = parseInt(select.value)
+    try {
+        const res = await fetch(`/api/todos/${todo.id}`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify({
+                name: input.value,
+                isComplete: todo.isComplete,
+                category: parseInt(select.value),
+                editMode: !todo.editMode
+            })
+        })
 
-    populateList(currentCategory)
+        const todos = await res.json()
+        const categories = await getCategories()
+
+        populateList(categories, todos, currentCategory)
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 // EDIT OR SAVE CATEGORY ------------------------------
