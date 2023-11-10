@@ -256,7 +256,7 @@ const addCategory = async (event) => {
                     "Content-Type": 'application/json'
                 },
                 body: JSON.stringify({
-                    categoryName: newCategory,
+                    categoryName: newCategory
                 })
             })
             const categories = await res.json()
@@ -265,7 +265,7 @@ const addCategory = async (event) => {
             showCategoryList(categories, todos, currentCategory)
         } catch (err) {
             console.log(err)
-        }   
+        }
     }
 
     categoryInput.value = ''
@@ -274,9 +274,28 @@ const addCategory = async (event) => {
 categoryForm.addEventListener('submit', addCategory)
 
 // COMPLETE A TODO ------------------------------
-const completeTodo = (todo) => {
-    todo.isComplete = !todo.isComplete
-    populateList(currentCategory)
+const completeTodo = async (todo) => {
+    try {
+        const res = await fetch(`/api/todos/${todo.id}`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify({
+                name: todo.name,
+                isComplete: !todo.isComplete,
+                category: todo.category,
+                editMode: todo.editMode
+            })
+        })
+
+        const todos = await res.json()
+        const categories = await getCategories()
+
+        populateList(categories, todos, currentCategory)
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 // EDIT OR SAVE TODO ------------------------------
