@@ -392,10 +392,17 @@ const deleteCategory = async (id) => {
 }
 
 // CLEAR COMPLETED TODOS ------------------------------
-const clearCompleted = () => {
-    const newTodos = todos.filter(todo => !todo.isComplete)
-    todos = newTodos
-    populateList(currentCategory)
+const clearCompleted = async () => {
+    let todos = await getTodos()
+    todos.forEach(todo => {
+        if (todo.isComplete) {
+            fetch(`/api/todos/${todo.id}`, {method:'DELETE'})
+        }
+    })
+    todos = await getTodos()
+    let categories = await getCategories()
+
+    populateList(categories, todos, currentCategory)
 }
 
 const clearBtn = document.querySelector('.clear-btn')
