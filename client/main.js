@@ -368,14 +368,27 @@ const deleteTodo = async (id) => {
 }
 
 // DELETE A CATEGORY ------------------------------
-const deleteCategory = (id) => {
-    const newCategories = categories.filter(category => category.id !== id)
-    categories = newCategories
+const deleteCategory = async (id) => {
+    try {
+        const res = await fetch(`/api/categories/${id}`, {
+            method: 'DELETE'
+        })
 
-    const newTodos = todos.filter(todo => todo.category !== id)
-    todos = newTodos
+        const categories = await res.json()
+        let todos = await getTodos()
 
-    showCategoryList(currentCategory)
+        todos.forEach(todo => {
+            if (todo.category === id) {
+                fetch(`/api/todos/${todo.id}`, {method:'DELETE'})
+            }
+        })
+
+        todos = await getTodos()
+
+        showCategoryList(categories, todos, currentCategory)
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 // CLEAR COMPLETED TODOS ------------------------------
