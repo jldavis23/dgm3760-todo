@@ -188,7 +188,7 @@ const showCategoryList = (categories, todos, activeCategory) => {
             editBtn.textContent = 'edit'
             editBtn.addEventListener('click', () => {
                 category.editMode = true
-                showCategoryList(currentCategory)
+                showCategoryList(categories, todos, currentCategory)
             })
         }
 
@@ -326,13 +326,31 @@ const saveTodo = async (event, todo, input, select) => {
 }
 
 // EDIT OR SAVE CATEGORY ------------------------------
-const saveCategory = (event, category, input) => {
+const saveCategory = async (event, category, input) => {
     event.preventDefault()
 
-    category.editMode = !category.editMode
-    category.categoryName = input.value
+    try {
+        
+        const res = await fetch(`/api/categories/${category.id}`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify({
+                categoryName: input.value,
+                editMode: !category.editMode
+            })
+        })
 
-    showCategoryList(currentCategory)
+        const categories = await res.json()
+        const todos = await getTodos()
+
+        console.log(categories)
+
+        showCategoryList(categories, todos, currentCategory)
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 // DELETE A TODO ------------------------------
