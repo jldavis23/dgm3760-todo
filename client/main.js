@@ -21,20 +21,20 @@ initializeApp()
 // DISPLAY THE TODO LIST ------------------------------
 const todoList = document.querySelector('.todo-list')
 
-const populateList = (categories, todos, categoryID) => {
+const populateList = (categories, todos) => {
     while (todoList.firstChild) {
         todoList.removeChild(todoList.firstChild);
     }
 
-    let filteredTodos
-    if (categoryID) {
-        filteredTodos = todos.filter(todo => todo.category === categoryID)
-    } else {
-        filteredTodos = todos
-    }
+    // let filteredTodos
+    // if (categoryID) {
+    //     filteredTodos = todos.filter(todo => todo.category === categoryID)
+    // } else {
+    //     filteredTodos = todos
+    // }
 
 
-    filteredTodos.forEach(todo => {
+    todos.forEach(todo => {
         let todoElement = document.createElement('li')
         todoElement.classList.add('todo')
 
@@ -100,7 +100,7 @@ const populateList = (categories, todos, categoryID) => {
             editBtn.textContent = 'edit'
             editBtn.addEventListener('click', () => {
                 todo.editMode = true
-                populateList(categories, todos, categoryID)
+                populateList(categories, todos)
             })
         }
 
@@ -182,7 +182,7 @@ const showCategoryList = (categories, todos, activeCategory) => {
 
             let span = document.createElement('span')
             span.textContent = category.categoryName
-            span.addEventListener('click', () => showCategoryList(category.id))
+            span.addEventListener('click', () => displayByCategory(category.id))
             li.appendChild(span)
 
             editBtn.textContent = 'edit'
@@ -204,7 +204,7 @@ const showCategoryList = (categories, todos, activeCategory) => {
     })
 
     currentCategory = activeCategory
-    populateList(categories, todos, activeCategory)
+    populateList(categories, todos)
 }
 
 // ADD A NEW TODO ------------------------------
@@ -227,7 +227,8 @@ const addTodo = async (event) => {
         })
         const todos = await res.json()
         const categories = await getCategories()
-        showCategoryList(categories, todos, currentCategory)
+        // showCategoryList(categories, todos, currentCategory)
+        displayByCategory(parseInt(categorySelect.value))
     } catch (err) {
         console.log(err)
     }
@@ -291,7 +292,7 @@ const completeTodo = async (todo) => {
         const todos = await res.json()
         const categories = await getCategories()
 
-        populateList(categories, todos, currentCategory)
+        populateList(categories, todos)
     } catch (err) {
         console.log(err)
     }
@@ -318,7 +319,7 @@ const saveTodo = async (event, todo, input, select) => {
         const todos = await res.json()
         const categories = await getCategories()
 
-        populateList(categories, todos, currentCategory)
+        populateList(categories, todos)
     } catch (err) {
         console.log(err)
     }
@@ -361,7 +362,7 @@ const deleteTodo = async (id) => {
         const todos = await res.json()
         const categories = await getCategories()
 
-        populateList(categories, todos, currentCategory)
+        populateList(categories, todos)
     } catch (err) {
         console.log(err)
     }
@@ -391,6 +392,24 @@ const deleteCategory = async (id) => {
     }
 }
 
+// DISPLAY TODOS BY CATEGORY ------------------------------
+const displayByCategory = async (categoryID) => {
+    try {
+        let todos
+        if (categoryID) {
+            const res = await fetch(`/api/categories/${categoryID}/todos`)
+            todos = await res.json()
+        } else {
+            todos = await getTodos()
+        }
+        const categories = await getCategories()
+
+        showCategoryList(categories, todos, categoryID)
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 // CLEAR COMPLETED TODOS ------------------------------
 const clearCompleted = async () => {
     let todos = await getTodos()
@@ -402,7 +421,7 @@ const clearCompleted = async () => {
     todos = await getTodos()
     let categories = await getCategories()
 
-    populateList(categories, todos, currentCategory)
+    populateList(categories, todos)
 }
 
 const clearBtn = document.querySelector('.clear-btn')
