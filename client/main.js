@@ -26,14 +26,6 @@ const populateList = (categories, todos) => {
         todoList.removeChild(todoList.firstChild);
     }
 
-    // let filteredTodos
-    // if (categoryID) {
-    //     filteredTodos = todos.filter(todo => todo.category === categoryID)
-    // } else {
-    //     filteredTodos = todos
-    // }
-
-
     todos.forEach(todo => {
         let todoElement = document.createElement('li')
         todoElement.classList.add('todo')
@@ -227,7 +219,7 @@ const addTodo = async (event) => {
         })
         const todos = await res.json()
         const categories = await getCategories()
-        // showCategoryList(categories, todos, currentCategory)
+
         displayByCategory(parseInt(categorySelect.value))
     } catch (err) {
         console.log(err)
@@ -319,7 +311,7 @@ const saveTodo = async (event, todo, input, select) => {
         const todos = await res.json()
         const categories = await getCategories()
 
-        populateList(categories, todos)
+        displayByCategory(parseInt(select.value))
     } catch (err) {
         console.log(err)
     }
